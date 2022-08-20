@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+
+<script>
+	let socket = new WebSocket("ws://localhost:8081/ChatServer/echo");
+	
+	//message received - show the message in div#messages
+	socket.onmessage = function(event) {
+		let message = event.data;
+		
+		let messageElem = document.createElement('div');
+		messageElem.textContent = message;
+		document.getElementById('messages').prepend(messageElem);		
+	}
+	
+	socket.onopen = function(event) {
+		alert("OnOpen on ClientSide.")
+
+		//alert("Socket Open was called");
+		//document.getElementById('messages').prepend("Socket Open was called");
+		document.getElementById("msg").innerText = "Socket Open was called";
+	}
+
+	socket.onclose = function(event) {
+		//alert("OnClose on ClientSide.");
+		document.getElementById("msg").innerText = "Socket Close was called";
+	}
+</script>
+
+</head>
+
+
+<body>
+
+<script>
+//send message from the form
+	function mySend() {
+		let outgoingMessage = document.getElementById("messageID").value;
+		
+		socket.send(outgoingMessage);
+		return false;
+	}
+</script>
+
+<form name="publish" id="publishFormID">
+  <input type="text" name="message" id="messageID">
+  <input type="button" value="Send" onclick="mySend()">
+</form>
+
+<br> <br>
+<div>Below is for checking if Open and Close are called on Client Side:</div>
+<span id="msg"></span>
+
+<br><br>
+<div>Below is for messages sent by Server:</div>
+<!-- div with messages -->
+<div id="messages"></div>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+package com.pgx.java.web;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import javax.websocket.OnClose;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.server.ServerEndpoint;
+@ServerEndpoint("/endpoint")
+public class MyWebSocket {
+    
+    private static PushTimeService pst;
+    @OnOpen
+    public void onOpen(Session session) {
+        System.out.println("onOpen::" + session.getId());   // DO NOTHING      
+    }
+    @OnClose
+    public void onClose(Session session) {
+        System.out.println("onClose::" +  session.getId());
+    }
+    
+    @OnMessage
+    public void onMessage(String message, Session session) {
+	
+	    // LOGIN PAGE - use servlets, NOT websockets
+			// Authenticate the UserID and Pwd
+			// If successfull
+			    // Store the LoginID in a Set
+		
+		
+		// CHAT WINDOW PAGE Initialize Message
+		// The javascript in this page will create the websocket sesssion
+		    // If INITIALIZE Message - only once when the page is initialized for the very first time - onload() event in HTML pages
+			    // Send MessageType(=INITIALIZE), LoginID 
+    		    // Remove LoginID from all HashMaps
+				// Save loginID vs Session Object
+				// Save SessionID vs Session Object
+				// Save SessionID to LoginID
+			
+			// If Chat Message - sent when user types a message, to field and pushes the send button
+				// Get SenderLoginID from Input SessionID, input session belongs to sender (NOT Receipent)
+				// Extract Receiver LoginID from Message
+				// Extract Message to be Sent
+				// Get the Receipent's Session Object by using to the Receipent LoginID
+				// Send SenderID PLUS Message to Receipent by using the Receipent's Session Object
+			
+			// Close
+				// Before Exiting Chat Window, call close() on the Session Object
+				// On Server Side, websocket onclose() will be called.
+				// Now using the Session ID, get the LoginID, clear the entries from the hashmaps
+			
+        System.out.println("onMessage::From=" + session.getId() + " Message=" + message);
+        
+        try {
+            session.getBasicRemote().sendText("Hello Client " + session.getId() + "!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @OnError
+    public void onError(Throwable t) {
+        System.out.println("onError::" + t.getMessage());
+    }
+}
