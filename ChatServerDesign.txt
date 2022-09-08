@@ -1,67 +1,63 @@
-package com.pgx.java.web;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
-@ServerEndpoint("/endpoint")
-public class MyWebSocket {
-    
-    private static PushTimeService pst;
-    @OnOpen
-    public void onOpen(Session session) {
-        System.out.println("onOpen::" + session.getId());   // DO NOTHING      
-    }
-    @OnClose
-    public void onClose(Session session) {
-        System.out.println("onClose::" +  session.getId());
-    }
-    
-    @OnMessage
-    public void onMessage(String message, Session session) {
+
+// LOGIN PAGE - use servlets, NOT websockets
+	// Authenticate the UserID and Pwd
+	// If successfull
+		// Store the LoginID in a Set
+
+
+// CHAT WINDOW PAGE Initialize Message
+// The javascript in this page will create the websocket sesssion
+	// On Login: If INITIALIZE Message - only once when the page is initialized for the very first time - onload() event in HTML pages
+		// Send MessageType(=INITIALIZE), LoginID 
+		// Remove LoginID from all HashMaps
+		// Save loginID vs Session Object
+		// Save SessionID vs Session Object - NOT NEEDED
+		// Save SessionID to LoginID
+		// Broadcast to all (except login user) stating that so and so user is logged in
 	
-	    // LOGIN PAGE - use servlets, NOT websockets
-			// Authenticate the UserID and Pwd
-			// If successfull
-			    // Store the LoginID in a Set
-		
-		
-		// CHAT WINDOW PAGE Initialize Message
-		// The javascript in this page will create the websocket sesssion
-		    // If INITIALIZE Message - only once when the page is initialized for the very first time - onload() event in HTML pages
-			    // Send MessageType(=INITIALIZE), LoginID 
-    		    // Remove LoginID from all HashMaps
-				// Save loginID vs Session Object
-				// Save SessionID vs Session Object
-				// Save SessionID to LoginID
-			
-			// If Chat Message - sent when user types a message, to field and pushes the send button
-				// Get SenderLoginID from Input SessionID, input session belongs to sender (NOT Receipent)
-				// Extract Receiver LoginID from Message
-				// Extract Message to be Sent
-				// Get the Receipent's Session Object by using to the Receipent LoginID
-				// Send SenderID PLUS Message to Receipent by using the Receipent's Session Object
-			
-			// Close
-				// Before Exiting Chat Window, call close() on the Session Object
-				// On Server Side, websocket onclose() will be called.
-				// Now using the Session ID, get the LoginID, clear the entries from the hashmaps
-			
-        System.out.println("onMessage::From=" + session.getId() + " Message=" + message);
-        
-        try {
-            session.getBasicRemote().sendText("Hello Client " + session.getId() + "!");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    @OnError
-    public void onError(Throwable t) {
-        System.out.println("onError::" + t.getMessage());
-    }
-}
+	// If Chat Message - sent when user types a message, to field and pushes the send button
+		// Get SenderLoginID from Input SessionID, input session belongs to sender (NOT Receipent)
+		// Extract Receiver LoginID from Message
+		// Extract Message to be Sent
+		// Get the Receipent's Session Object by using to the Receipent LoginID
+		// Send SenderID PLUS Message to Receipent by using the Receipent's Session Object
+	
+	// Close
+		// Before Exiting Chat Window, call close() on the Session Object
+		// On Server Side, websocket onclose() will be called.
+		// Now using the Session ID, get the LoginID, clear the entries from the hashmaps
+		// Broadcast to all (except the logout user) that this user is no longer logged in
+	
+
+ENHANCEMENTS:
+	1. Make the UI better, make a list of features 
+	   a) Who am I ? This is not shown in the chat window
+	   b) Design a screen layout of how the CHAT UI should look 
+	        - UI will have 3 panels, 
+	           *) Left Hand Side panel will have list of users that are logged in
+			   *) Bottom Small Panel to send messages. 
+			   *) Chat Panel: Rest of the screen is occupied by Chat Panel where chat messages shows up.
+			   *) When user sends a message, the message is moved to Chat Panel.
+			   *) On the Right Top Side, you show the current logged in user
+			- You click a user on the left panel, then the chats belonging to that user will show up in the chat panel
+	        - 
+			- 
+			-
+       c)
+	   d)
+	2. 
+	   a) REST SERVER: Move the HashMaps Cache to a separate project that uses REST Technology
+          and Make the project a REST Server.	   
+	      The reason for doing this is, REST server can be called from multiple webservers. 
+	      We will need multiple webservers to scale to million of users and in all such 
+	      scenarios, if the Cache is local to each webserver, then the logic fails.
+	      So we need a central light weight Cache Server which responds super fast to all 
+	      Cache Requests (via REST) from multiple webservers.
+	   b) REST CLIENT: Now Change the Chat Server code to incorporate REST Client so
+	      the chat server can access the REST Server to utilize the Cache in the REST
+		  Server.
+		  NOTE: The REST Server can be accessed from JAVA as well as from Browser using 
+		        XMLHTTPRequest Object. But in this scenario we only need a JAVA REST Client 
+				to be part of Chat Server Code.
+	  
+	3. Whenever user logs 

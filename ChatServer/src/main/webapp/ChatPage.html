@@ -1,32 +1,41 @@
 <!DOCTYPE html>
 <html>
-    <head>
-      <meta charset="UTF-8">
-      <meta http-equiv="Content-Security-Policy"  content="connect-src * 'unsafe-inline';">
-        <script src="wsclient.js"></script>
-        <style>
-            table    { border: 2px solid black; }
-            input    { width: 300px; }
-            select   { width: 300px; }
-            textarea { width: 513px; border: 2px solid black; }
-            #btnSend       { width: 100px; }
-        </style>
-    </head>
-    <body onload="initalize()">
-        <h1>WebSocket Client</h1>
-        <span id="foo"></span>
-        <table>
-            <tr>
-                <td width="200px">Message</td>
-                <td><input type="text" id="message"/></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <input id="btnSend" type="button" value="Send Message" onclick="onSendClick()">
-                </td>
-            </tr>
-        </table><br/>
-        <textarea id="incomingMsgOutput" rows="10" cols="20" disabled="disabled"></textarea>
-    </body>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+
+<style> 
+#incomingMessagesID {
+  width: 300px;
+  height: 100px;
+  border: 1px solid blue;
+}
+
+#senderID {
+  width: 300px;
+  height: 100px;
+  border: 1px solid blue;
+}
+</style>
+
+<script src="WebSocketClient.js"></script>
+</head>
+
+<body>
+	
+	<form name="publish" id="publishFormID">
+	  <input type="text" name="message" id="messageID">
+	  <input type="text" name="receiver" id="receiverID">
+	  <input type="button" value="Send" onclick="mySend()">
+	</form>
+	
+	<div id="foo"></div>
+	
+	Incoming Messages
+	<div id="incomingMessagesID"></div>
+	
+	Sender
+	<div id="senderID"></div>
+
+</body>
 </html>
