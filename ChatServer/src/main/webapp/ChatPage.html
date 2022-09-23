@@ -16,6 +16,12 @@
   height: 100px;
   border: 1px solid blue;
 }
+
+#onlineUsersListID {
+  width: 300px;
+  height: 100px;
+  border: 1px solid blue;
+}
 </style>
 
 <script src="WebSocketClient.js"></script>
@@ -23,19 +29,25 @@
 
 <body>
 	
+	<h1 id="welcomeMessageID"></h1>
+	
 	<form name="publish" id="publishFormID">
 	  <input type="text" name="message" id="messageID">
 	  <input type="text" name="receiver" id="receiverID">
 	  <input type="button" value="Send" onclick="mySend()">
 	</form>
 	
-	<div id="foo"></div>
-	
+	<br>
 	Incoming Messages
 	<div id="incomingMessagesID"></div>
 	
-	Sender
+	<br>
+	Senders
 	<div id="senderID"></div>
+	
+	<br>
+	Online Users
+	<div id="onlineUsersListID"></div>
 
 </body>
 </html>

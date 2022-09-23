@@ -29,6 +29,9 @@ public class ChatWebSocket {
         
         Cache.map1.remove(userName);
         Cache.map2.remove(sessionID);
+        Cache.map3.remove(session);
+        
+        broadcast();
     }
     
     @OnMessage
@@ -39,8 +42,12 @@ public class ChatWebSocket {
     	if (arrOfStr.length == 1) {
     		System.out.println("User is " + message);
     		System.out.println("Session is " + session);
+    		
             Cache.map1.put(message, session);
             Cache.map2.put(session.getId(), message);
+            Cache.map3.put(session, message);
+            
+            broadcast();
             
             System.out.println("Hash map is:");
             for (Map.Entry<String, Session> ele: Cache.map1.entrySet())
@@ -68,4 +75,29 @@ public class ChatWebSocket {
     public void onError(Throwable t) {
         System.out.println("onError::" + t.getMessage());
     }
+    
+    public void broadcast() {
+    	for (Map.Entry<Session, String> ele1: Cache.map3.entrySet()) {
+        	Session sessionObj = ele1.getKey();
+        	
+        	try {
+				sessionObj.getBasicRemote().sendText("Remove List of All Online Users");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	
+        	for (Map.Entry<String, Session> ele2: Cache.map1.entrySet()) {
+        		String name = ele2.getKey();
+        		System.out.println("User name is " + name);
+        		try {
+					sessionObj.getBasicRemote().sendText(name);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        	}	
+        }
+    }
 }
+
